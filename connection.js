@@ -8,7 +8,7 @@ var dbUrl = process.env.DB_URL;
 
 
 
-mongoose.connect('mongodb+srv://root:OhKrNLVxKzHPYnEh@cluster0-r8mo4.mongodb.net/healthcare?retryWrites=true&w=majority', { useUnifiedTopology: true, useNewUrlParser: true});
+mongoose.connect('mongodb+srv://root:b7WXz3uuvsz8inSJ@cluster0.5chth.mongodb.net/measurement?retryWrites=true&w=majority', { useUnifiedTopology: true, useNewUrlParser: true});
 var db = mongoose.connection;
 // Added check for DB connection
 if(!db)

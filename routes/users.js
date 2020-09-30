@@ -64,7 +64,7 @@ router.post('/logout' , function(req, res, next) {
 router.post('/updateprofile',upload.single('userphoto') ,checkAuth, userController.updateprofile ); 
 
 // user listing
-router.post('/', upload.none() ,checkAuth, function(req, res, next) {
+router.post('/', upload.none() , function(req, res, next) {
   UsersModel.find( {} , function(err, data) 
 {
      res.send({ status : 'success', data  : data});

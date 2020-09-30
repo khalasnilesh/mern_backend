@@ -35,7 +35,9 @@ exports.register = function(req, res, next) {
            _id : mongoose.Types.ObjectId(),
             username :  req.body.username ,
             password: hash,
-            email :  req.body.email
+            email :  req.body.email,
+            role : '3',
+            status : req.body.status
           });  
         
         //  UsersModel.create({userdetails } );
@@ -45,7 +47,7 @@ exports.register = function(req, res, next) {
               res.status('200').json( {message : "user created successfuly!!" , data : doc})
             }
           ).catch(
-            err=>{ res.json( {message : "user created successfulyUser not created!!" , status: 'fail' , data : err}) }
+            err=>{ res.json( {message : "User not created!!" , status: 'fail' , data : err}) }
           );
   
         }
@@ -65,11 +67,12 @@ exports.register = function(req, res, next) {
     // localStorage.setItem('tokenvar', token1);
     
     
-    UsersModel.findOne({ username: req.body.username }, function(err, result) {
+    UsersModel.findOne({ email: req.body.email }, function(err, result) {
       if (!result) {
-        res.send({ message: "The username and password combination is not correct!" });
+        res.send({ message: "The email and password combination is not correct!" });
       }
       else{
+
             if(!bcrypt.compareSync(req.body.password, result.password)) {
               res.send( { message: "The password is invalid" });
             }

@@ -35,7 +35,12 @@ const userSchema = new Schema({
     userphoto:
     {
         type: String,
-    }
+    },
+    role:
+    {
+        type: String,
+    },
+
 },
     {
         timestamps: true
@@ -44,4 +49,4 @@ const userSchema = new Schema({
 
     userSchema.set('toJSON', { virtuals: true });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('tbl_users', userSchema);
