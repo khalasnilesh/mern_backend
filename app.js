@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var clinicsRouter = require('./routes/clinics');
@@ -13,6 +14,7 @@ var AdminsRouter = require('./routes/admins');
 
 require ('./connection'); 
 var app = express();
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -59,5 +61,5 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
 
 
-app.disable('etag');
+//app.disable('etag');
 

@@ -59,6 +59,10 @@ router.post('/login' ,  upload.none() , clientsController.login );
 
 router.post('/updateclient' ,   upload.none(), clientsController.updateclient);
 
+// delete client
+router.post('/deleteclient' ,   upload.none(), clientsController.deleteclient);
+
+
 // user logout
 router.post('/logout' , function(req, res, next) {
   localStorage.removeItem('secret');
@@ -70,11 +74,22 @@ router.post('/updateprofile',upload.single('userphoto') ,checkAuth, clientsContr
 
 // client listing
 router.post('/', upload.none() , function(req, res, next) {
-  console.log('Test ');
+  var query1 = '';
+  if(req.body.clientId)
+  {
+      console.log('client edit');
+      var query1 =  {_id: req.body.clientId};
+  }
+  else
+  {
+      console.log('client listing');
+      var query1 = {};
 
-  ClientsModel.find( {} , function(err, data) 
+  }
+  ClientsModel.find( query1 , function(err, data) 
 {
-    if(data.length)
+  console.log(query1);
+    if(data)
     {
         res.send({ status : 'success', data  : data, message : 'CLient data listing successfully!!'});
     }

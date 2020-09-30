@@ -113,25 +113,28 @@ exports.register = function(req, res, next) {
 
  exports.updateclient = function(req, res, next) {
 
-  //  console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnn');
+  
 //   console.log(req.body);
   //  console.log('pppppppppppppppppppppppppppppp');
   var newvalues = '';
   if(req.body.password)
   {
+     console.log('1');
     bcrypt.hash(req.body.password, 10, function( err, hash) {
       if(!err) {
         var password = hash;
         var newvalues = { $set: { password: hash, name : req.body.name , status: req.body.status } };
        // console.log(newvalues);
-       ClientsModel.findByIdAndUpdate(        req.body.id
+       ClientsModel.findByIdAndUpdate(        req.body.clientId
         , newvalues,  function(err, obj) {
         if (err)
         {
             res.send({status : 'Update fail' , message : err});
     
         };
-       res.send({status : 'Success' , message : 'Profile updated successfully!' , data : obj});
+           var responseData = [];
+           responseData.push(obj);  
+          res.send({status : 'Success' , message : 'Profile updated successfully!' , data : responseData});
         }
         
         );
@@ -143,14 +146,16 @@ exports.register = function(req, res, next) {
     console.log('22');
     //var password = '1';
     var newvalues = { $set: {  name : req.body.name , status: req.body.status } };
-    ClientsModel.findByIdAndUpdate(        req.body.id
+    ClientsModel.findByIdAndUpdate(        req.body.clientId
       , newvalues,  function(err, obj) {
       if (err)
       {
           res.send({status : 'Update fail' , message : err});
   
-      };
-     res.send({status : 'Success' , message : 'Profile updated successfully!' , data : obj});
+      }; 
+        var responseData = [];
+        responseData.push(obj);
+        res.send({status : '22Success' ,data :responseData , message : 'Profile updated successfully!' });
       }
       
       );
@@ -225,8 +230,8 @@ exports.addclient = function(req, res, next) {
         //  UsersModel.create({userdetails } );
           userdetails.save().then(
             doc =>
-            {
-              res.status('200').json( {message : "client created successfuly!!" , data : doc,status: 'success'})
+            { 
+              res.json( {message : "client created successfuly!!" , data : doc,status: 'success'})
             }
           ).catch(
             err=>{ res.json( {message : "User not created!! Validation error!!" , status: 'fail' , data : err}) }
@@ -241,4 +246,11 @@ exports.addclient = function(req, res, next) {
   }
 
  
-  
+  exports.deleteclient  = function(req, res, next) {
+    var myquery = { _id: req.body.clientId };
+    ClientsModel.deleteOne(myquery , function(err, obj) {
+        if (err) throw err;
+        res.send({ status : 'success', message : 'record deleted'} );      
+        //db.close();
+      });
+  }
