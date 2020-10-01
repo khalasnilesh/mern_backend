@@ -225,6 +225,7 @@ exports.addclient = function(req, res, next) {
             password: hash,
             email :  req.body.email,
             status : req.body.status,
+            address : req.body.address
           });  
         
         //  UsersModel.create({userdetails } );

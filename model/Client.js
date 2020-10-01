@@ -12,6 +12,7 @@ const clientSchema = new Schema({
         type: String,
        
     },
+    
     password: {
         maxlength: 100000,
         trim: true,
@@ -37,6 +38,11 @@ const clientSchema = new Schema({
         type: String,
         required: true,
 
+    }, 
+    address: {
+        maxlength: 10000000000,
+        trim: true,
+        type: String,
     },
     date:
     {

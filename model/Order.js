@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false);
 const Schema = mongoose.Schema;
 
-const postSchema = new Schema({
+const orderSchema = new Schema({
     _id : mongoose.Schema.Types.ObjectId,
 
     title: {
@@ -17,15 +17,22 @@ const postSchema = new Schema({
         trim: true,
         type: String
     },
+    productId: 
+    {
+        type: String,
+        required: true,
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
       },
-  clientId: {
+    clientId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Client',
     required: true,
         },
+        
         status: {
             required: true,
             type: Number
@@ -34,16 +41,14 @@ const postSchema = new Schema({
         {
             type: String
         },
-        
 
-   
-    
+
 },
     {
         timestamps: true
     });
 
 
-    postSchema.set('toJSON', { virtuals: true });
+    orderSchema.set('toJSON', { virtuals: true });
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('tbl_orders', orderSchema);
