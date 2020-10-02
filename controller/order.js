@@ -68,7 +68,7 @@ exports.orderListing = function(req, res, next) {
         }
     },
     {   $unwind:"$client_details" },
-    {   $match : {clientId : ObjectId(req.body.userId) } },
+    {   $match : {userId : ObjectId(req.body.userId) } },
     {
         $match : query
     }
