@@ -2,6 +2,7 @@ var OrdersModel = require('../model/Order');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
+var ObjectId = require('mongodb').ObjectID;
 
 exports.createOrder = function(req, res, next) {
 console.log('order insert');        
@@ -30,6 +31,21 @@ console.log('order insert');
   }
 
 exports.orderListing = function(req, res, next) {
+  var ObjectId = require('mongodb').ObjectID;
+
+  console.log(req.body.status);
+  if(req.body.status == 0) {
+  var query = {
+      status : 0
+  }
+  
+} else {
+  // do something without query params
+  query = {
+      status :  { $not :{ $eq : 0 }}
+  }
+  
+}
 
   OrdersModel.aggregate([
     {
@@ -41,7 +57,7 @@ exports.orderListing = function(req, res, next) {
           as: "user_details"
         }
    },
-   {$unwind : "$user_details"},
+   { $unwind : "$user_details" },
     // Join with user_role table
     {
         $lookup:{
@@ -52,14 +68,24 @@ exports.orderListing = function(req, res, next) {
         }
     },
     {   $unwind:"$client_details" },
-    //{ $match : { status : 0 } },
-    { 
-      $match : {
-                status : { $not :{ $eq : 0 }}
-                }
+    {   $match : {clientId : ObjectId(req.body.userId) } },
+    {
+        $match : query
     }
+
     ]).exec( function(err , result ) {
-    res.send({ status : 'success', data : result } ); 
+      if(result.length == 0)
+      {
+        var message = 'No result Found!!'
+        var status = 'Fail!';
+      }
+      else
+      {
+        var message = 'Total '+ result.length +' Orders Found!!'
+        var status = 'Success!';
+      }
+    console.log();
+    res.send({ status : status, data : result , 'message' : message } ); 
  })
   
 }
