@@ -34,7 +34,8 @@ router.get('/',upload1.none() , orderController.orderListing);
 router.post('/pendingorders',upload1.none() , orderController.pendingorders); 
 
 router.post('/completedorders',upload1.none() , orderController.completedorders); 
-  
+
+router.post('/orderbyid',upload1.none() , orderController.orderbyid); 
   
 router.post('/fetchPostbyUserID',upload1.none() , function(req, res, next) {
 /*    PostsModel.find({ userId: req.body.userId })

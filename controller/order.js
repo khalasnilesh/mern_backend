@@ -92,6 +92,68 @@ exports.orderListing = function(req, res, next) {
 
 
 
+exports.orderbyid = function(req, res, next) {
+  var ObjectId = require('mongodb').ObjectID;
+
+  console.log(req.body.orderid);
+  if(req.body.status == 0) {
+  var query = {
+      status : 0
+  }
+  
+} else {
+  // do something without query params
+  query = {
+      status :  { $not :{ $eq : 0 }}
+  }
+  
+}
+
+  OrdersModel.aggregate([
+    {
+      $lookup:
+        {
+          from: "tbl_users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user_details"
+        }
+   },
+   { $unwind : "$user_details" },
+    // Join with user_role table
+    {
+        $lookup:{
+            from: "clients", 
+            localField: "clientId", 
+            foreignField: "_id",
+            as: "client_details"
+        }
+    },
+    {   $unwind:"$client_details" },
+   // {   $match : {userId : ObjectId(req.body.userId) } },
+    {
+        $match : { 
+                  _id : ObjectId(req.body.orderid)
+                  }
+    }
+
+    ]).exec( function(err , result ) {
+      if(result.length == 0)
+      {
+        var message = 'No result Found!!'
+        var status = 'Fail!';
+      }
+      else
+      {
+        var message = 'Total '+ result.length +' Orders Found!!'
+        var status = 'Success!';
+      }
+    console.log();
+    res.send({ status : status, data : result , 'message' : message } ); 
+ })
+  
+}
+
 
 exports.pendingorders = function(req, res, next) {
   var ObjectId = require('mongodb').ObjectID;
