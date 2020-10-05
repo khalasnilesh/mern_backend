@@ -27,6 +27,7 @@ exports.register = function(req, res, next) {
 
     bcrypt.hash(req.body.password, 10, function(err, hash) {
      // Store hash in your password DB.
+     console.log(req.body.phone);
         if(err) {
           return res.json({ "message" : "password issue"});
         }
@@ -35,7 +36,9 @@ exports.register = function(req, res, next) {
            _id : mongoose.Types.ObjectId(),
             username :  req.body.username ,
             password: hash,
-            email :  req.body.email
+            email :  req.body.email,
+            phone :  req.body.phone,
+            address : req.body.address
           });  
         
         //  UsersModel.create({userdetails } );
@@ -45,7 +48,7 @@ exports.register = function(req, res, next) {
               res.status('200').json( {message : "user created successfuly!!" , data : doc})
             }
           ).catch(
-            err=>{ res.json( {message : "user created successfulyUser not created!!" , status: 'fail' , data : err}) }
+            err=>{ res.json( {message : "user created successfuly ! User not created!!" , status: 'fail' , data : err}) }
           );
   
         }
@@ -119,11 +122,27 @@ exports.register = function(req, res, next) {
   var newvalues = '';
   if(req.body.password)
   {
-     console.log('1');
+    
     bcrypt.hash(req.body.password, 10, function( err, hash) {
       if(!err) {
+         console.log(req.body.name);
+         console.log(req.body.phone);
+         console.log(req.body.email);
+         console.log(req.body.address);
+
+
         var password = hash;
-        var newvalues = { $set: { password: hash, name : req.body.name , status: req.body.status } };
+        var newvalues = {
+         $set: 
+         { 
+           password: hash,
+           name : req.body.name,
+           status: req.body.status,
+           address: req.body.address,
+           phone: req.body.phone,
+           email: req.body.email
+          }
+         };
        // console.log(newvalues);
        ClientsModel.findByIdAndUpdate(        req.body.clientId
         , newvalues,  function(err, obj) {
@@ -134,7 +153,9 @@ exports.register = function(req, res, next) {
         };
            var responseData = [];
            responseData.push(obj);  
-          res.send({status : 'Success' , message : 'Profile updated successfully!' , data : responseData});
+          res.send({status : 'Success' ,
+           message : 'Profile updated successfully!' ,
+            data : responseData});
         }
         
         );
@@ -145,7 +166,12 @@ exports.register = function(req, res, next) {
   {
     console.log('22');
     //var password = '1';
-    var newvalues = { $set: {  name : req.body.name , status: req.body.status } };
+    var newvalues = { $set: {  
+      name : req.body.name ,
+       status: req.body.status,
+       address: req.body.address,
+           phone: req.body.phone,
+           email: req.body.email } };
     ClientsModel.findByIdAndUpdate(        req.body.clientId
       , newvalues,  function(err, obj) {
       if (err)
@@ -155,7 +181,9 @@ exports.register = function(req, res, next) {
       }; 
         var responseData = [];
         responseData.push(obj);
-        res.send({status : '22Success' ,data :responseData , message : 'Profile updated successfully!' });
+        res.send({status : '22Success' ,
+          data :responseData ,
+           message : 'Profile updated successfully!' });
       }
       
       );
@@ -225,7 +253,8 @@ exports.addclient = function(req, res, next) {
             password: hash,
             email :  req.body.email,
             status : req.body.status,
-            address : req.body.address
+            address : req.body.address,
+            phone :  req.body.phone,
           });  
         
         //  UsersModel.create({userdetails } );

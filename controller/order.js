@@ -68,10 +68,10 @@ exports.orderListing = function(req, res, next) {
         }
     },
     {   $unwind:"$client_details" },
-    {   $match : {userId : ObjectId(req.body.userId) } },
-    {
+   // {   $match : {userId : ObjectId(req.body.userId) } },
+   /* {
         $match : query
-    }
+    }*/
 
     ]).exec( function(err , result ) {
       if(result.length == 0)

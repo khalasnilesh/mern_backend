@@ -29,8 +29,6 @@ const clientSchema = new Schema({
         {
             unique: true
         }
-        
-
     },
     status: {
         maxlength: 100000,
@@ -48,6 +46,13 @@ const clientSchema = new Schema({
     {
         type: Date,
         default: Date.now
+    },
+    phone: {
+        maxlength: 200,
+        minlength: 1,
+        required: true,
+        trim: true,
+        type: String,
     },
     // userphoto:
     // {
