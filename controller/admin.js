@@ -24,21 +24,23 @@ var jwt = require('jsonwebtoken');
 /////////////////////////////
 
 exports.register = function(req, res, next) {
-
+    console.log('here');
     bcrypt.hash(req.body.password, 10, function(err, hash) {
      // Store hash in your password DB.
         if(err) {
           return res.json({ "message" : "password issue"});
         }
         else{ 
-          var userdetails = new UsersModel({
+          var userdetails = new AdminModel({
            _id : mongoose.Types.ObjectId(),
-            username :  req.body.username ,
+            status :  req.body.status ,
             password: hash,
-            email :  req.body.email
+            email :  req.body.email,
+            name :  req.body.name,
+            role :  req.body.role
           });  
         
-        //  UsersModel.create({userdetails } );
+        //  AdminModel.create({userdetails } );
           userdetails.save().then(
             doc =>
             {
@@ -65,9 +67,9 @@ exports.register = function(req, res, next) {
     // localStorage.setItem('tokenvar', token1);
     
     
-    UsersModel.findOne({ username: req.body.username }, function(err, result) {
+    AdminModel.findOne({ email: req.body.email }, function(err, result) {
       if (!result) {
-        res.send({ message: "The username and password combination is not correct!" });
+        res.send({ message: "email is not correct!" });
       }
       else{
             if(!bcrypt.compareSync(req.body.password, result.password)) {
@@ -75,9 +77,11 @@ exports.register = function(req, res, next) {
             }
             else
             {
-              var token1 = jwt.sign({ username: req.body.username , password : req.body.password }, 'secret');
+              var token1 = jwt.sign({ email: req.body.email , password : req.body.password }, 'AdminSecret');
              // localStorage.setItem('usertoken', token1);
               result['token'] = token1;
+              result.token = token1;
+              console.log(result);
               res.send( { message: "correct details!!" , data : result , token : token1});
 
             }
@@ -180,7 +184,7 @@ exports.register = function(req, res, next) {
 
         var newvalues = { $set: { password: hash , userphoto : userphoto} };
         var filepath = req.file.filename;
-        UsersModel.findByIdAndUpdate(        req.body.userId
+        AdminModel.findByIdAndUpdate(        req.body.userId
             , newvalues,  function(err, obj) {
             if (err)
             {
@@ -222,7 +226,7 @@ exports.addclient = function(req, res, next) {
             status : req.body.status,
           });  
         
-        //  UsersModel.create({userdetails } );
+        //  AdminModel.create({userdetails } );
           userdetails.save().then(
             doc =>
             {

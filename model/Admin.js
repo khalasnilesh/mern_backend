@@ -38,6 +38,14 @@ const adminSchema = new Schema({
         required: true,
 
     },
+    role: {
+        maxlength: 200,
+        minlength: 1,
+        required: true,
+        trim: true,
+        type: String,
+       
+    },
     date:
     {
         type: Date,
@@ -55,4 +63,4 @@ const adminSchema = new Schema({
 
     adminSchema.set('toJSON', { virtuals: true });
 
-module.exports = mongoose.model('Admin', adminSchema);
+module.exports = mongoose.model('tbl_admin', adminSchema);

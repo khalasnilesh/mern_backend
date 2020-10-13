@@ -42,6 +42,7 @@ var UsersModel = require('../model/User');
 
 
 
+router.post('/fetchuserbyId' ,   upload.none(), userController.fetchuserbyId);
 
 // user register
 router.post('/register' ,   upload.none(), userController.register);
@@ -54,6 +55,8 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 // user login
 router.post('/login' ,  upload.none() , userController.login ); 
 
+router.post('/deleteuser' ,  upload.none() , userController.deleteuser ); 
+
 // user logout
 router.post('/logout' , function(req, res, next) {
   localStorage.removeItem('secret');
@@ -61,7 +64,7 @@ router.post('/logout' , function(req, res, next) {
 }); 
 
 // update profile
-router.post('/updateprofile',upload.single('userphoto') ,checkAuth, userController.updateprofile ); 
+router.post('/updateprofile',upload.single('userphoto') , userController.updateprofile ); 
 
 // user listing
 router.post('/', upload.none() , function(req, res, next) {

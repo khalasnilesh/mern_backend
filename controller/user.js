@@ -93,7 +93,9 @@ exports.register = function(req, res, next) {
   exports.updateprofile = function(req, res, next) {
 
     //  console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnn');
-    //  console.log(req.body.userId);
+      console.log(req.body.userId);
+      console.log(req.body.email);
+      console.log(req.body.password);
     //  console.log('pppppppppppppppppppppppppppppp');
    
     bcrypt.hash(req.body.password, 10, function( err, hash) {
@@ -102,21 +104,24 @@ exports.register = function(req, res, next) {
       
         if(!err) {
          // Passwords match
-        var userphoto = req.file.filename;
+        //var userphoto = req.file.filename;
         var password = hash;
 
         //var myquery = { _id: req.body.userId };
 
-        var newvalues = { $set: { password: hash , userphoto : userphoto} };
-        var filepath = req.file.filename;
-        UsersModel.findByIdAndUpdate(        req.body.userId
-            , newvalues,  function(err, obj) {
+        var newvalues = { $set: { password: hash , email : req.body.email} };
+        UsersModel.findByIdAndUpdate( req.body.userId
+            , newvalues, { "new": true} ,  function(err, obj) {
             if (err)
             {
-                res.send({status : 'Update fail' , message : err});
+                res.send({status : '0' , data : err , message : 'Error while updating data'});
         
-            };
-           res.send({status : 'Success' , message : '11Profile updated successfully!' , data : obj});
+            }
+            else
+            {
+              res.send({status : '1' , data : obj , message : 'Profile updated successfully!' });
+
+            }
             //db.close();  
             }
             
@@ -129,8 +134,28 @@ exports.register = function(req, res, next) {
       });
       
    
-  }     
+  }    
   
+  exports.deleteuser  = function(req, res, next) {
+    var myquery = { _id: req.body.userId };
+    UsersModel.deleteOne(myquery , function(err, obj) {
+        if (err) throw err;
+        res.send({ status : 'success', message : 'User deleted sucessfully!'} );      
+        //db.close();
+      });
+  }
 
  
+exports.fetchuserbyId = function(req, res, next) {
+ 
+   UsersModel.find({ _id: req.body.userId }, function(err, result) {
+      if (!result) {
+        res.send({ message: "userId is not correct!", status : 'fail'  });
+      }
+      else{
+              res.send( { message: "correct details!!" ,status : 'success', data : result});
+      } 
   
+    });  
+
+}

@@ -178,12 +178,16 @@ exports.register = function(req, res, next) {
       {
           res.send({status : 'Update fail' , message : err});
   
-      }; 
-        var responseData = [];
+      }
+      else
+      {
+           var responseData = [];
         responseData.push(obj);
         res.send({status : '22Success' ,
           data :responseData ,
            message : 'Profile updated successfully!' });
+      }
+       
       }
       
       );

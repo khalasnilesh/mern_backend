@@ -21,10 +21,10 @@ console.log('order insert');
         orderdetails.save().then(
             doc =>
             {
-              res.status('200').json( {message : "Order created successfuly!!" , data : doc})
+              res.status('200').json( { status : 'success' , message : "Order created successfuly!!" , data : doc})
             }
           ).catch(
-            err=>{ res.json( {message : "Order not created!!" , status: 'fail' , data : err}) }
+            err=>{ res.json( { status : 'fail' , message : "Order not created!!" , status: 'fail' , data : err}) }
           );
         
     

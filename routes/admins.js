@@ -5,7 +5,9 @@ const mongoose = require('mongoose');
 var path = require('path');
 var jwt = require('jsonwebtoken');
 var router = express.Router();
-var ClientsModel = require('../model/Admin'); 
+var adminModel = require('../model/Admin'); 
+const adminController = require("../controller/admin");
+
 
 const bcrypt = require('bcrypt');
 
@@ -22,13 +24,6 @@ var storage = multer.diskStorage({
 })
 const upload = multer({storage:  storage});
 
-///////////////////////////   
-   
-
-
-///////////////////
-const clientsController = require("../controller/admin");
-////////////////
 var checkAuth = require("../middleware/auth");
 //////////////////
 var router = express.Router();
@@ -40,7 +35,10 @@ router.use(bodyParser.json());
 //var UsersModel = require('../model/User'); 
 /* GET users listing. */
 
+router.post('/register' ,   upload.none(), adminController.register);
+router.post('/login' ,   upload.none(), adminController.login);
 
+//router.post('/logincheck', function(req, res, next) {
 router.post('/logincheck', function(req, res, next) {
     
         if(req.body.email == 'admin@gmail.com' && req.body.password == '123456')
