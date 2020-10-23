@@ -62,11 +62,6 @@ exports.register = function(req, res, next) {
 
   exports.login = function(req, res, next) {
 
-    // var token1 = jwt.sign({ username: req.body.username , password : req.body.password }, 'logintokenalgo');
-  
-    // localStorage.setItem('tokenvar', token1);
-    
-    
     UsersModel.findOne({ email: req.body.email }, function(err, result) {
       if (!result) {
         res.send({ message: "The email and password combination is not correct!" });
@@ -81,6 +76,18 @@ exports.register = function(req, res, next) {
               var token1 = jwt.sign({ username: req.body.username , password : req.body.password }, 'secret');
              // localStorage.setItem('usertoken', token1);
               result['token'] = token1;
+
+              //set token and device token
+              console.log("result" + result._id);  
+              var newvalues = { $set: { devicetoken: req.body.device_token , authtoken :token1 } };
+              UsersModel.findByIdAndUpdate( result._id
+            , newvalues, { "new": true} ,  function(err, obj) {
+            
+                  //db.close();  
+            }
+            
+            );
+
               res.send( { message: "correct details!!" , data : result , token : token1});
 
             }

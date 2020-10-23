@@ -77,7 +77,12 @@ exports.register = function(req, res, next) {
             }
             else
             {
-              var token1 = jwt.sign({ email: req.body.email , password : req.body.password }, 'AdminSecret');
+              var token1 = jwt.sign(
+                                   { email: req.body.email ,
+                                    password : req.body.password 
+                                  }, 'AdminSecret'
+                                  , { expiresIn:  60*60*1 }
+                                  );
              // localStorage.setItem('usertoken', token1);
               result['token'] = token1;
               result.token = token1;

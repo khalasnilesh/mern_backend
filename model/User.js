@@ -40,6 +40,14 @@ const userSchema = new Schema({
     {
         type: String,
     },
+    devicetoken:
+    {
+        type: String,
+    },
+    authtoken:
+    {
+        type: String,
+    },
 
 },
     {

@@ -73,7 +73,7 @@ router.post('/logout' , function(req, res, next) {
 router.post('/updateprofile',upload.single('userphoto') ,checkAuth, clientsController.updateprofile ); 
 
 // client listing
-router.post('/', upload.none() , function(req, res, next) {
+router.post('/', upload.none() ,checkAuth ,  function(req, res, next) {
   var query1 = '';
   if(req.body.clientId)
   {

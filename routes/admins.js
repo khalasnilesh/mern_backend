@@ -7,6 +7,7 @@ var jwt = require('jsonwebtoken');
 var router = express.Router();
 var adminModel = require('../model/Admin'); 
 const adminController = require("../controller/admin");
+var checkAuth = require("../middleware/auth");
 
 
 const bcrypt = require('bcrypt');
@@ -39,22 +40,16 @@ router.post('/register' ,   upload.none(), adminController.register);
 router.post('/login' ,   upload.none(), adminController.login);
 
 //router.post('/logincheck', function(req, res, next) {
-router.post('/logincheck', function(req, res, next) {
-    
-        if(req.body.email == 'admin@gmail.com' && req.body.password == '123456')
-        {
-        var token1 = jwt.sign({ username: req.body.email , password : req.body.password }, 'secret');
-        // localStorage.setItem('usertoken', token1);
-        res.send( { message: "correct details!!" ,  token : token1});
-        }
-        else
-        {
-            res.send( { message: "Incorrect details!!" , data : ''});
-        }
-}); 
+
+
+router.post('/logout', function(req, res, next) {
+     localStorage.removeItem('AdminSecret');
+     res.send( { message: "Log Out Successfully" , status : 'success'});
+    });
 
 function checklogin(req, res, next)
 {
+
     var usertoken = localStorage.getItem('usertoken');
     try
     {
